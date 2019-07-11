@@ -35,20 +35,39 @@ axios.get('https://api.github.com/users/Bastlifa')
           user, and adding that card to the DOM.
 */
 
-const followersArray = ["tetondan",
-  "dustinmyers",
-  "justsml",
-  "luishrd",
-  "bigknell",
-  "victusfate"
-];
+//MVP version:
 
-followersArray.forEach(follower =>
-  {
-    axios.get(`https://api.github.com/users/${follower}`)
-      .then(response => document.querySelector(".cards").appendChild(cardMaker(response.data)))
-      .catch(error => console.log(error))
-  })
+// const followersArray = ["tetondan",
+//   "dustinmyers",
+//   "justsml",
+//   "luishrd",
+//   "bigknell",
+//   "victusfate"
+// ];
+
+// followersArray.forEach(follower =>
+//   {
+//     axios.get(`https://api.github.com/users/${follower}`)
+//       .then(response => document.querySelector(".cards").appendChild(cardMaker(response.data)))
+//       .catch(error => console.log(error))
+//   })
+
+//stretch version:
+
+axios.get(`https://api.github.com/users/Bastlifa`)
+    .then(response => axios.get(response.data.followers_url))
+    .then(response =>
+      {
+        response.data.forEach(follower => 
+        {
+          axios.get(follower.url)
+          .then(resp => document.querySelector(".cards").appendChild(cardMaker(resp.data)))
+        })
+        // .then(document.querySelector('.cards').appendChild(cardMaker(response.data)))
+      })
+    .catch(error => console.log(error))
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
